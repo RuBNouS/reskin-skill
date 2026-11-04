@@ -1,6 +1,6 @@
 # DESIGN.md format
 
-The format comes from Google Stitch and is the one used by the awesome-design-md collection: YAML tokens on top, written rules below. Other tools can read the file because it stays plain Markdown.
+The format comes from [Google Stitch](https://github.com/google-labs-code/design.md) and is the one used by the awesome-design-md collection: YAML tokens on top, written rules below. Other tools can read the file because it stays plain Markdown.
 
 The tokens say what values to use. The sections below them are what let another conversation produce the same look, so write them for someone who has never seen the reference.
 
@@ -11,13 +11,13 @@ name: <project or style name>
 description: "<one sentence on the look>"
 
 colors:
-  primary: "#5e6ad2"
+  primary: "#3b6cf6"
   on-primary: "#ffffff"
-  canvas: "#010102"
+  canvas: "#101114"
   surface-1: "rgba(255, 255, 255, 0.05)"
-  ink: "#f7f8f8"
-  ink-muted: "#d0d6e0"
-  hairline: "#23252a"
+  ink: "#f4f4f5"
+  ink-muted: "#b8bcc4"
+  hairline: "#2a2c31"
 
 typography:
   headline:
@@ -96,6 +96,6 @@ Things the person chose. These outrank everything above and survive every regene
 - Name tokens by role, never by colour: `surface-1`, not `dark-gray`.
 - Use only the sections that have something to say, but always keep `Signature`, `Product Map`, `Sources` and `Project Decisions`.
 - A token for a layered surface holds the real layered value, such as `rgba(...)`, never the colour it happens to produce on screen.
-- `Sources` lists each screenshot or style, then what is **measured** (read from pixels or from the source file) and what is **estimated** (read by eye). Pin a downloaded style to its commit.
+- `Sources` lists each screenshot or style, then what is **measured** (read from pixels or from the source file) and what is **estimated** (read by eye). For a downloaded style, give its repository and commit and keep its credit: `MIT License, Copyright (c) 2026 VoltAgent`, with a link to the licence.
 - If the project ships several themes, give each its own colour block using the same role names, for example `colors-light`, and say which came from the source and which were derived.
 - Write rules someone could check. "Cards use 1px hairline borders and no shadow" is a rule. "Clean and modern" is not.

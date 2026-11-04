@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Measures the colours in a screenshot, and checks contrast between two colours. No dependencies.
 //   node colors.mjs shot.png [more.webp]
-//   node colors.mjs contrast "#f7f8f8" "#010102"
+//   node colors.mjs contrast "#f4f4f5" "#101114"
 // PNG is read directly. Other formats go through whatever the system already has to convert images.
 // Exit code 2: the image could not be read, so its colours have to be estimated by eye.
 

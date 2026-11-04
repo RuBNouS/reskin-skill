@@ -152,7 +152,7 @@ Not done until each of these has been run in this session:
 - Open every theme and a narrow width, including dialogs and empty states.
 - Contrast passes on the main text and action pairs, in every theme, measured against the blended colour at its worst point:
   ```bash
-  node scripts/colors.mjs contrast "#f7f8f8" "#010102"
+  node scripts/colors.mjs contrast "#f4f4f5" "#101114"
   ```
   Below 4.5 for text, or 3 for large text and icons, fix it and record the change in `DESIGN.md`.
 
