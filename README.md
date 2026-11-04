@@ -1,33 +1,37 @@
 # reskin
 
-An agent skill that changes how an existing app looks without changing what it does.
+Agent skills that redesign an existing app without changing what it does.
 
-Give it screenshots you like, or the name of a style, and it writes a `DESIGN.md`, applies it to your code and checks that everything still works.
+Give it screenshots you like, or the name of a style. It works out what the app is, writes a `DESIGN.md`, rebuilds the look and the layout, compares the result with your reference and checks that everything still works.
 
 ```
 /reskin                        applies the project's DESIGN.md, or offers styles if there is none
-/reskin linear                 uses the Linear style
+/reskin linear                 redesigns in the Linear style
 /reskin + screenshots          takes the look from your screenshots
 /reskin stripe + screenshots   uses Stripe as a base, and the screenshots override it
 /reskin add an export button   does the task under the project's DESIGN.md
+
+/reskin-color + screenshots    changes colours only
+/reskin-full + screenshots     shows 3 directions to choose from
+/reskin-full 5 linear          shows 5 directions
 ```
 
-## Why a DESIGN.md first
-
-Screenshots never go straight into code. They become a `DESIGN.md`, a plain text file with exact values and rules, in the format used by Google Stitch and [awesome-design-md](https://github.com/VoltAgent/awesome-design-md). The look then survives the conversation, and the next one can follow it.
+## How it works
 
 ```
 screenshots ─┐
-             ├─> DESIGN.md ─> your code ─> tests, contrast and browser checks
-style name ──┘
+             ├─> understand the app ─> DESIGN.md ─> redesign ─> compare with the reference ─┐
+style name ──┘                                          ^                                   │
+                                                        └───────── fix what falls short ────┘
 ```
 
-- **Colours are measured.** A small script with no dependencies reads the pixels of your screenshots, so you get true hex values and not guesses. PNG is read directly. JPEG, WebP and others are converted with what your system already has: Windows Imaging Component, `sips` on macOS, or ImageMagick or ffmpeg on Linux.
-- **The rest is read by eye** and marked as estimated: fonts, sizes, spacing and hierarchy.
-- **The system is taken, not the screen.** Your layout, features and wording stay yours.
-- **Your choices survive.** `DESIGN.md` has a `Project Decisions` section that carries over each time it is regenerated.
-- **Your themes survive.** If a style only describes dark mode, your light theme is derived from it and not deleted.
-- **Colours with meaning survive.** Win and loss, status, rarity and your own data keep their hue.
+- **It understands the app first.** Each screen's main action, what every element is for, and what code depends on.
+- **It finds the signature.** The few traits that make the reference recognisable, which then have to show on every screen.
+- **It works out how things are built.** A screenshot of glass shows glass plus what is behind it. Copying that colour gives a flat panel, so it rebuilds the layers.
+- **Colours are measured.** A small script with no dependencies reads your screenshots' pixels. PNG is read directly. JPEG, WebP and others are converted with what your system already has: Windows Imaging Component, `sips` on macOS, or ImageMagick or ffmpeg on Linux.
+- **It compares and corrects.** It puts the result next to the reference and fixes the largest gap, for up to three rounds.
+- **The app stays itself.** Features, flows, wording and themes stay. So do its name, a font chosen on purpose, and colours that carry meaning.
+- **The look survives.** `DESIGN.md` records all of this, and your own choices carry over each time it is regenerated.
 
 ## Install
 
@@ -38,13 +42,15 @@ In Claude Code:
 /plugin install reskin@reskin-skill
 ```
 
-Installed as a plugin, the command is `/reskin:reskin`. To get plain `/reskin`, or for other agents that read skills, copy `skills/reskin` into your skills folder, such as `.claude/skills/`.
+Installed as a plugin, the commands are `/reskin:reskin` and so on. To get plain `/reskin`, or for other agents that read skills, copy the three folders in `skills/` into your skills folder, such as `.claude/skills/`. Keep them together, because the other two read `reskin`.
 
 You need Node.js to measure colours. Without it, or with an image your system cannot convert, colours are estimated and marked as such.
 
 ## Limits
 
-- It restyles existing interfaces. To build an app from nothing, other tools fit better.
+- It redesigns existing interfaces. To build an app from nothing, other tools fit better.
+- Comparing with the reference needs an agent with a browser. Without one, it asks you for a capture.
+- Changing the layout carries more risk than changing colours. Your tests and the click-through catch most of it, and git brings back the rest.
 - Screenshots hold no real values for fonts and sizes, so those are approximations.
 - Most named styles analyse a product's marketing site, not its app, so some rules have to be adapted or dropped.
 - Anything drawn by code, such as canvas, WebGL or a game world, is left alone. In a game, only the menus and overlays change.

@@ -5,7 +5,7 @@
     {
       "name": "reskin",
       "source": "./",
-      "description": "Change how an existing app looks without changing what it does."
+      "description": "Redesign an existing app from screenshots or a named style, without changing what it does."
     }
   ]
 }
