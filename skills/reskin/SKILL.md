@@ -20,7 +20,9 @@ Before choosing anything, find:
 - the themes it ships, and whether they switch
 - how to run the app and its tests
 - ids, classes and attributes that scripts or tests depend on
-- `git status`: if files you would edit have uncommitted changes, stop and ask, because the change has to be reversible
+- what is drawn by code: canvas, WebGL, charts, game worlds. CSS cannot reach these, so they stay as they are, and you say so now if most of the app is like this
+- colours that carry meaning: win and loss, status, rarity, teams, and anything from the person's data such as category colours
+- `git status`: the change has to be reversible. If files you would edit have uncommitted changes, or this is not a git repository, stop and ask
 
 ## 2. Settle on one DESIGN.md
 
@@ -46,12 +48,14 @@ A screenshot has two kinds of information, and they come from different places.
 **Colours are measured.** Run this from the skill's directory, with the path of every image:
 
 ```bash
-node scripts/colors.mjs <image.png> [more.png]
+node scripts/colors.mjs <image> [more images]
 ```
 
-`dominant` lists colours by area, which gives you the surfaces. `accents` lists small saturated colours, which gives you the brand colour. Use those hex values as they are, but look at the screenshot to decide what each one is: browser chrome, the taskbar and other apps get measured too and are not part of the look. Text covers too little area to measure, so its colours are estimated. Exit code 2 means the file is not a readable PNG, and if you have no path to the image at all the script cannot run: in both cases read the colours by eye and mark them as estimated.
+`dominant` lists colours by area, which gives you the surfaces. `accents` lists the most colourful small areas, which gives you the brand colour, and in a pastel design that colour is itself pale. Use those hex values as they are, but look at the screenshot to decide what each one is: browser chrome, the taskbar and other apps get measured too, as do the colour fringes around small text, and none of those are part of the look. Text covers too little area to measure, so its colours are estimated.
 
-**Everything else is read by looking:** type scale and weights, spacing rhythm, corner radius, borders versus shadows, density, hierarchy and how much of the screen carries colour. Sizes depend on the capture's scale, so mark them as estimated. You cannot identify a font from pixels: describe its kind and pick a similar system or open font.
+`converted: true` means the image was not a plain PNG and the system converted it. If it was a JPEG, compression shifts colours slightly, so call them approximate. Exit code 2 means the file could not be read, and if you have no path to the image at all the script cannot run: in both cases read the colours by eye and mark them as estimated.
+
+**Everything else is read by looking:** type scale and weights, spacing rhythm, corner radius, borders versus shadows, density, hierarchy and how much of the screen carries colour. Sizes depend on the capture's scale, so mark them as estimated. You cannot identify a font from pixels: describe its kind and pick a similar system or open font. If the project's current font is part of its identity and the screenshot does not clearly call for another, keep it and record that as a decision.
 
 Take the system, not the screen. Layout, features, wording, logos and images stay the project's own. If several screenshots disagree, say what you took from each, and ask only if the choice would change the result visibly.
 
@@ -69,7 +73,7 @@ Before the first edit, run the tests and note the result. If you have a browser,
 
 Then work in this order, so most of the change comes from the fewest edits:
 
-1. **Tokens.** Map each `DESIGN.md` token onto the variable that already plays that role, and change the values. Keep the variable names.
+1. **Tokens.** Map each `DESIGN.md` token onto the variable that already plays that role, and change the values. Keep the variable names. If the project has no variables, add them to its main stylesheet first. If one variable is used both as a fill and as text, and the new colour is too pale to read as text, split it in two.
 2. **Components.** Follow the rules for the most used ones first. Style names map by role: a marketing "pricing card" rule becomes your card rule, and a rule with no counterpart is dropped.
 3. **Leftovers.** Search for hard-coded colours, radii and shadows, and replace them with tokens.
 
@@ -79,6 +83,8 @@ While you do it:
 - Do not rename or remove any id, class or attribute that scripts or tests use.
 - Do not add dependencies or swap frameworks. Fonts must load the way the project already loads things. A local app gets system fonts, not a web font.
 - Keep every theme the project ships. If `DESIGN.md` describes only one, keep its token roles and derive the others. A style's "no light mode" rule does not remove the project's light theme.
+- Colours that carry meaning stay recognisable. Keep the hue and change the lightness only as far as contrast needs. Colours from the person's data are never replaced.
+- Style what the browser draws by default. An open `<select>` list ignores normal CSS: where the browser supports it, use `appearance: base-select` inside `@supports` and style `::picker(select)` and `option`. Set `color-scheme` on each theme so date pickers and scrollbars follow it.
 
 ## 6. Check it
 
@@ -89,10 +95,10 @@ Not done until each of these has actually been run in this session:
   ```bash
   node scripts/colors.mjs contrast "#f7f8f8" "#010102"
   ```
-  Below 4.5 for text, or 3 for large text and icons, fix the token and record the change in `DESIGN.md`.
-- If you have a browser, open the app in every theme and at a narrow width, and use the main flows. Look at the screens against the screenshots or the style, including dialogs and empty states.
+  Below 4.5 for text, or 3 for large text and icons, fix the token and record the change in `DESIGN.md`. On a translucent surface or a gradient, measure against the blended colour at its worst point, not the token's value.
+- If you have a browser, open the app in every theme and at a narrow width, and use the main flows. Look at the screens against the screenshots or the style, including dialogs and empty states. Open every dropdown and date picker with a real click: an open list still in the browser's default style is a failure.
 - Search again for leftover hard-coded values.
 
 ## 7. Report
 
-Say what the look was taken from, which values are measured and which estimated, what you deliberately did not follow and why, and what you could not check. Do not commit unless the project's instructions say to.
+Say what the look was taken from, which values are measured and which estimated, what you deliberately did not follow and why, and what you could not check. If the theme the person sees first is not the one the look came from, tell them which to pick. Do not commit unless the project's instructions say to.
