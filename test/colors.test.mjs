@@ -102,23 +102,86 @@ test('finds surfaces by area and a small brand colour as an accent', () => {
 	assert.deepStrictEqual(result.accents, [{ hex: '#5e6ad2', pct: 0.1 }]);
 });
 
+test('finds accents in a pastel design, where nothing is vivid', () => {
+	// Pale background and panels, with a pale mint control and a blush panel
+	const rows = solidRows(100, 100, (x) => {
+		if (x < 2) return [156, 203, 195];
+		if (x < 8) return [240, 205, 199];
+		if (x < 50) return [224, 231, 224];
+		return [252, 249, 244];
+	});
+	const { accents } = measureColours(decodePng(png(100, rows)));
+	assert.deepStrictEqual(accents.map((a) => a.hex).sort(), ['#9ccbc3', '#f0cdc7']);
+});
+
+test('finds no accents in a greyscale design, and copes with an empty image', () => {
+	const grey = solidRows(10, 10, (x) => (x < 5 ? [240, 240, 240] : [30, 30, 30]));
+	assert.deepStrictEqual(measureColours(decodePng(png(10, grey))).accents, []);
+
+	const empty = solidRows(4, 4, () => [0, 0, 0, 0]);
+	const { dominant, accents } = measureColours(decodePng(png(4, empty, { colourType: 6, pixelBytes: 4 })));
+	assert.deepStrictEqual([dominant, accents], [[], []]);
+});
+
+test('a large coloured surface is not an accent, and a strong palette ignores weak tints', () => {
+	const rows = solidRows(100, 100, (x, y) => {
+		if (x < 40) return [35, 134, 54];
+		if (x < 42) return [68, 147, 248];
+		if (x < 44) return [210, 227, 219];
+		return y < 50 ? [13, 17, 23] : [10, 10, 10];
+	});
+	const { accents } = measureColours(decodePng(png(100, rows)));
+	assert.deepStrictEqual(accents, [{ hex: '#4493f8', pct: 2 }]);
+});
+
+test('a few very vivid pixels do not hide a real brand colour', () => {
+	const rows = solidRows(100, 100, (x, y) => {
+		if (x === 0 && y < 3) return [255, 0, 0];
+		if (x < 5) return [35, 134, 54];
+		return [13, 17, 23];
+	});
+	const { accents } = measureColours(decodePng(png(100, rows)));
+	assert.strictEqual(accents[0].hex, '#238636');
+});
+
 test('contrast matches known WCAG values', () => {
 	assert.strictEqual(contrast('#000000', '#ffffff'), 21);
 	assert.strictEqual(contrast('#ffffff', '#000000'), 21);
 	assert.strictEqual(contrast('#777777', '#ffffff'), 4.48);
 });
 
+// A 1x1 WebP. Linux and macOS may not have a converter, and then exit code 2 is the correct answer
+test('other formats are converted when the system can', { skip: process.platform !== 'win32' }, () => {
+	const folder = mkdtempSync(join(tmpdir(), 'reskin-'));
+	try {
+		const webp = join(folder, 'pixel.webp');
+		writeFileSync(webp, Buffer.from('UklGRiIAAABXRUJQVlA4IBYAAAAwAQCdASoBAAEADsD+JaQAA3AAAAAA', 'base64'));
+		const run = spawnSync(process.execPath, [SCRIPT, webp], { encoding: 'utf8' });
+		assert.strictEqual(run.status, 0, run.stdout);
+		const result = JSON.parse(run.stdout);
+		assert.strictEqual(result.converted, true);
+		assert.strictEqual(result.dominant.length, 1);
+	} finally {
+		rmSync(folder, { recursive: true, force: true });
+	}
+});
+
 test('the command line reports what cannot be read with exit code 2', () => {
 	const folder = mkdtempSync(join(tmpdir(), 'reskin-'));
 	try {
-		const jpeg = join(folder, 'photo.jpg');
-		writeFileSync(jpeg, Buffer.from('ffd8ffe0', 'hex'));
+		const broken = join(folder, 'broken.jpg');
+		writeFileSync(broken, Buffer.from('ffd8ffe0', 'hex'));
 		const run = (...args) => spawnSync(process.execPath, [SCRIPT, ...args], { encoding: 'utf8' });
 
-		const failed = run(jpeg);
+		const failed = run(broken);
 		assert.strictEqual(failed.status, 2);
 		assert.match(failed.stdout, /not a PNG/);
 		assert.strictEqual(run(join(folder, 'missing.png')).status, 2);
+
+		// A truncated PNG cannot be read or converted either, and must not crash
+		const truncated = join(folder, 'cut.png');
+		writeFileSync(truncated, png(4, solidRows(4, 4, () => [1, 2, 3])).subarray(0, 40));
+		assert.strictEqual(run(truncated).status, 2);
 
 		const good = join(folder, 'ok.png');
 		writeFileSync(good, png(1, [[1, 2, 3]]));
