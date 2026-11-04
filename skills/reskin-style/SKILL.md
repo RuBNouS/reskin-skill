@@ -15,4 +15,4 @@ Apply the reference's whole visual style and leave the layout alone: it should l
 
 **Leave alone:** the markup and scripts, and where things are: their order, their grouping and which element sits next to which. Elements may grow or shrink a little from padding and type, but nothing changes position relative to its neighbours.
 
-So in section 5 of `reskin`, skip the composition step and do not edit markup. Before finishing, read the diff: only styles may have changed. Then put each screen next to its capture from before the first edit: CSS alone can move things, for example a new `display: flex` stretches its children, so anything that changed place or width is a failure to fix.
+So in section 5 of `reskin`, skip the composition step and do not edit markup, and in section 6 skip the check that the layout has changed, because here it must not. Before finishing, read the diff: only styles may have changed. Then put each screen next to its capture from before the first edit: CSS alone can move things, for example a new `display: flex` stretches its children, so anything that changed place or width is a failure to fix.
