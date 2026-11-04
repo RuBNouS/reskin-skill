@@ -57,19 +57,24 @@ You need Node.js to measure colours. Without it, or with an image your system ca
 - Anything drawn by code, such as canvas, WebGL or a game world, is left alone. In a game, only the menus and overlays change.
 - Styled dropdown lists need a browser with `appearance: base-select`. Others show their default list, which still works.
 - How much of your app it can check depends on your tests and on whether your agent has a browser.
+- A style is a starting point for your own product. It gives you no rights to a brand's name, logo or identity, so do not use it to pass as that brand.
 
 ## Similar projects
 
 If this does not fit, these do parts of the same job and may suit you better:
 
 - [awesome-design-md](https://github.com/VoltAgent/awesome-design-md): the collection of styles this skill downloads from.
-- [anydesign](https://github.com/uxKero/anydesign): turns images, websites and Figma files into a `design.md`, with more analysis tools. It does not apply the result to your code.
-- [design.how](https://github.com/arla6ka/design.how): rigorous migration of a large app onto a design system. Its look comes from the app itself, not from a reference.
-- [build-design](https://github.com/jakubkrehel/skills): builds a piece of UI that matches a design image, using the tokens you already have.
+- [anydesign](https://github.com/uxKero/anydesign): turns images, websites and Figma files into a `design.md` and design tokens, with more analysis tools, for you to build with in the tool you choose.
+- [design.how](https://github.com/arla6ka/design.how): skills to build a design system from your app and move the app onto it, plus design systems you can install.
+- [build-design](https://github.com/jakubkrehel/skills): builds UI from a Figma file or a design image, using the tokens and components you already have.
 
 ## Credits
 
-Named styles come from [VoltAgent/awesome-design-md](https://github.com/VoltAgent/awesome-design-md) (MIT), downloaded at a pinned commit. This project is not affiliated with that project or with any of the brands whose styles it can use.
+Named styles come from [VoltAgent/awesome-design-md](https://github.com/VoltAgent/awesome-design-md) (MIT, Copyright (c) 2026 VoltAgent). They are downloaded at a pinned commit, are not included in this repository, and keep that credit in the `DESIGN.md` they produce.
+
+The `DESIGN.md` format comes from [Google Stitch](https://github.com/google-labs-code/design.md).
+
+This project is not affiliated with those projects or with any of the brands whose styles it can use. Brand names only identify a style and belong to their owners.
 
 ## License
 
