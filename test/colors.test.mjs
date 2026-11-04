@@ -6,7 +6,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { deflateSync } from 'node:zlib';
 import { fileURLToPath } from 'node:url';
-import { contrast, decodePng, measureColours } from '../skills/reskin/scripts/colors.mjs';
+import { contrast, cropImage, decodePng, measureColours } from '../skills/reskin/scripts/colors.mjs';
 
 const SCRIPT = fileURLToPath(new URL('../skills/reskin/scripts/colors.mjs', import.meta.url));
 
@@ -193,6 +193,28 @@ test('the command line reports what cannot be read with exit code 2', () => {
 		assert.strictEqual(run('contrast', '#000000', '#ffffff').stdout.trim(), '21');
 		assert.strictEqual(run('contrast', 'black', '#ffffff').status, 1);
 		assert.strictEqual(run().status, 1);
+	} finally {
+		rmSync(folder, { recursive: true, force: true });
+	}
+});
+
+test('crop keeps only the chosen part, so browser chrome is not measured', () => {
+	// Top 10% is a grey bar, the rest is the app
+	const rows = solidRows(10, 10, (x, y) => (y === 0 ? [200, 200, 200] : [10, 20, 30]));
+	const image = decodePng(png(10, rows));
+	assert.strictEqual(measureColours(image).dominant.length, 2);
+	const cropped = cropImage(image, [0, 0.1, 1, 0.9]);
+	assert.deepStrictEqual([cropped.width, cropped.height], [10, 9]);
+	assert.deepStrictEqual(measureColours(cropped).dominant, [{ hex: '#0a141e', pct: 100 }]);
+
+	const folder = mkdtempSync(join(tmpdir(), 'reskin-'));
+	try {
+		const file = join(folder, 'bar.png');
+		writeFileSync(file, png(10, rows));
+		const run = (...args) => spawnSync(process.execPath, [SCRIPT, ...args], { encoding: 'utf8' });
+		assert.strictEqual(JSON.parse(run('--crop=0,0.1,1,0.9', file).stdout).dominant.length, 1);
+		assert.strictEqual(run('--crop=0,0.5,1,0.9', file).status, 1);
+		assert.strictEqual(run('--crop=a,b', file).status, 1);
 	} finally {
 		rmSync(folder, { recursive: true, force: true });
 	}

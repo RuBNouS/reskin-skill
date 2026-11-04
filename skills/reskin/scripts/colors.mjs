@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // Measures the colours in a screenshot, and checks contrast between two colours. No dependencies.
 //   node colors.mjs shot.png [more.webp]
+//   node colors.mjs --crop=0,0.08,1,0.92 shot.png   (left,top,width,height as fractions: skips browser chrome)
 //   node colors.mjs contrast "#f4f4f5" "#101114"
 // PNG is read directly. Other formats go through whatever the system already has to convert images.
 // Exit code 2: the image could not be read, so its colours have to be estimated by eye.
@@ -117,6 +118,19 @@ export function decodePng(buffer) {
 	return { width, height, pixels };
 }
 
+// Keeps a rectangle given as fractions of the image: left, top, width, height
+export function cropImage({ width, height, pixels }, [left, top, w, h]) {
+	const x0 = Math.floor(left * width);
+	const y0 = Math.floor(top * height);
+	const cropWidth = Math.max(1, Math.min(width - x0, Math.round(w * width)));
+	const cropHeight = Math.max(1, Math.min(height - y0, Math.round(h * height)));
+	const out = new Uint32Array(cropWidth * cropHeight);
+	for (let y = 0; y < cropHeight; y++) {
+		out.set(pixels.subarray((y0 + y) * width + x0, (y0 + y) * width + x0 + cropWidth), y * cropWidth);
+	}
+	return { width: cropWidth, height: cropHeight, pixels: out };
+}
+
 const toHex = (colour) => `#${colour.toString(16).padStart(6, '0')}`;
 const channels = (colour) => [(colour >> 16) & 255, (colour >> 8) & 255, colour & 255];
 
@@ -198,18 +212,30 @@ function convertToPng(file) {
 }
 
 // Formats and PNG variants that the decoder here does not read still work if the system can convert them
-function measureFile(file) {
+function measureFile(file, crop) {
+	const measure = (png) => measureColours(crop ? cropImage(decodePng(png), crop) : decodePng(png));
 	const buffer = readFileSync(file);
 	try {
-		return measureColours(decodePng(buffer));
+		return measure(buffer);
 	} catch (error) {
 		const converted = convertToPng(file);
 		if (!converted) throw error;
-		return { ...measureColours(decodePng(converted)), converted: true };
+		return { ...measure(converted), converted: true };
 	}
 }
 
-function main(args) {
+function main(argv) {
+	const flag = argv.find((a) => a.startsWith('--crop='));
+	const args = argv.filter((a) => a !== flag);
+	let crop;
+	if (flag) {
+		crop = flag.slice(7).split(',').map(Number);
+		const [left, top, w, h] = crop;
+		if (crop.length !== 4 || crop.some((n) => !(n >= 0 && n <= 1)) || !(w > 0) || !(h > 0) || left + w > 1 || top + h > 1) {
+			console.error('--crop needs left,top,width,height as fractions between 0 and 1, inside the image.');
+			return 1;
+		}
+	}
 	if (args[0] === 'contrast' && args.length === 3) {
 		if (!args.slice(1).every((c) => /^#[0-9a-f]{6}$/i.test(c))) {
 			console.error('Colours must look like #rrggbb.');
@@ -219,14 +245,14 @@ function main(args) {
 		return 0;
 	}
 	if (args.length === 0) {
-		console.error('Usage: colors.mjs <image> [more images] | colors.mjs contrast <#rrggbb> <#rrggbb>');
+		console.error('Usage: colors.mjs [--crop=l,t,w,h] <image> [more images] | colors.mjs contrast <#rrggbb> <#rrggbb>');
 		return 1;
 	}
 
 	let failed = false;
 	for (const file of args) {
 		try {
-			console.log(JSON.stringify({ file, ...measureFile(file) }, null, 1));
+			console.log(JSON.stringify({ file, ...measureFile(file, crop) }, null, 1));
 		} catch (error) {
 			console.log(JSON.stringify({ file, error: error.message }));
 			failed = true;
