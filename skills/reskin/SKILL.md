@@ -45,7 +45,28 @@ Read it before deciding anything. You cannot redesign what you have not understo
 | A description of a look, no `DESIGN.md` | Write `DESIGN.md` from the description and the project's current values |
 | A task, with `DESIGN.md` present | Keep the file as it is. Do the task under its rules |
 | Nothing, with `DESIGN.md` present | Apply it again and fix whatever drifted from it |
-| Nothing, no `DESIGN.md` | Offer 3 or 4 fitting styles from `references/styles.md` with one line each, and stop until the person picks |
+| Nothing, no `DESIGN.md` | Show the menu below and stop until the person picks |
+
+**The menu.** Keep it short and in this shape, in the person's language, with 3 or 4 fitting styles from `references/styles.md`:
+
+```
+**<Project>** is <what it is, in a few words>. It has no DESIGN.md yet, so tell me what look you want.
+
+Pick a style:
+- `/reskin spotify`: <what this app would look like in it, in a few words>
+- `/reskin uber`: <same>
+- `/reskin nvidia`: <same>
+
+Or use your own reference:
+- `/reskin` with a screenshot attached
+- `/reskin` followed by a description, such as "dark and dense"
+
+To control how much changes:
+- `/reskin-style`: the whole look, without moving anything
+- `/reskin-full`: 3 versions to choose from, from a light layout change to a complete one
+```
+
+Nothing else: no internal steps, no history of the project's past attempts, and no extra questions.
 
 Write the file by following `references/design-md-format.md`. An existing `## Project Decisions` section always carries over word for word, and anything the person asked for in this conversation is added to it. Decisions outrank everything else.
 
@@ -88,7 +109,7 @@ Before the first edit, run the tests and note the result. If you have a browser,
 Work from the largest idea to the smallest:
 
 1. **Ambience.** The page's background, light and mood, and the material of each surface. This must already read like the reference before you touch anything else.
-2. **Composition.** Screen by screen, from section 1: make the main thing the focal point, group what belongs together, give it the room the reference gives. You can move, group, nest and resize anything, and add wrappers and decorative elements. No screen should be one small cluster above an empty page.
+2. **Composition.** This is not optional: a redesign whose layout is still the old one is only a restyle. Reorganise every screen, using section 1: make the main thing the focal point, and move, merge, nest and resize sections around it. Change how navigation and groups of controls are built, and add wrappers and decorative elements as needed. No screen should be one small cluster above an empty page. Before editing, write one line per screen saying what moves. If a screen has nothing that should move, say why in the report, and that should be rare.
 3. **Components.** The most used first, using the map from section 3, down to the smallest piece, including what scripts generate. Copy how the reference's parts are made, not only their colours.
 4. **States.** Hover, focus, pressed, disabled, empty, loading, win and loss. Add motion if the reference suggests it, and honour `prefers-reduced-motion`. An open `<select>` list ignores normal CSS: use `appearance: base-select` inside `@supports` and style `::picker(select)` and `option`. Set `color-scheme` on each theme.
 5. **Leftovers.** Search for hard-coded colours, radii and shadows, in scripts too.
@@ -110,9 +131,10 @@ A `backdrop-filter` inside another element with `backdrop-filter` blurs nothing 
 This is the step that decides quality, and it comes before any other check. If you have a browser:
 
 1. Capture every screen, in the theme the reference is based on, and look at each next to the reference.
-2. For each signature trait and each screen, answer honestly: is it visible at a glance? Would a stranger connect them? Is this still the old layout with new paint?
-3. Write down what falls short, fix the largest gap first, and capture again.
-4. Repeat, up to three rounds. Stop earlier only when every trait is clearly visible on every screen. Report what still falls short.
+2. For each signature trait and each screen, answer honestly: is it visible at a glance? Would a stranger connect them?
+3. Put each screen next to its capture from before the first edit. If a stranger would call it the same layout with new paint, the composition is not done.
+4. Write down what falls short, fix the largest gap first, and capture again.
+5. Repeat, up to three rounds. Stop earlier only when every trait is clearly visible on every screen. Report what still falls short.
 
 Without a browser, say that this step could not run and ask the person to send a capture.
 
