@@ -19,6 +19,8 @@ Answer in the language the person writes in. Keep `DESIGN.md` in English unless 
 
 Read it before deciding anything. You cannot redesign what you have not understood.
 
+**Checks that come first.** Before reading deeply or downloading anything, run these in order, and stop at the first one that needs the person: 1) a style that might be a typo (section 2), 2) the git state, 3) the tools. Report everything missing in one message, and wait for the answer before going on.
+
 **The product**
 - What is it for, who uses it, and what mood does it have now?
 - List every screen and state. For each one: what is the one main action, what should the eye land on first, what is secondary?
@@ -56,6 +58,7 @@ Read it before deciding anything. You cannot redesign what you have not understo
 | A style name | Fetch it, as described in `references/styles.md`, then read its signature as in section 3 |
 | A description of a look, no `DESIGN.md` | Write `DESIGN.md` from the description and the project's current values |
 | A task, with `DESIGN.md` present | Keep the file as it is. Do the task under its rules |
+| A task, no `DESIGN.md` | If it only changes looks, write `DESIGN.md` from the project's current values and do the task under it. If it adds or changes what the app does, say that `reskin` only changes looks and does not do it, then show the menu |
 | Nothing, with `DESIGN.md` present | Apply it again and fix whatever drifted from it |
 | Nothing, no `DESIGN.md` | Show the menu below and stop until the person picks |
 
@@ -74,7 +77,7 @@ Or use your own reference:
 - `/reskin` followed by a description, such as "dark and dense"
 
 To control how much changes:
-- `/reskin-style`: the whole look, without moving anything
+- `/reskin-style`: the whole look, without moving anything (these two are the other skills in this repository)
 - `/reskin-full`: 3 versions to choose from, from a light layout change to a complete one
 ```
 
