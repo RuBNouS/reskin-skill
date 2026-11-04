@@ -12,8 +12,8 @@ Give it screenshots you like, or the name of a style. It works out what the app 
 /reskin add an export button   does the task under the project's DESIGN.md
 
 /reskin-style + screenshots    applies the whole look, without moving anything
-/reskin-full + screenshots     shows 3 directions, from a light layout change to a complete one
-/reskin-full 5 linear          shows 5 directions, in smaller steps
+/reskin-full + screenshots     builds 3 versions you can open, from a light layout change to a complete one
+/reskin-full 5 linear          builds 5 versions, in smaller steps
 ```
 
 ## How it works
