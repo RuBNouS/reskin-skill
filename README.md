@@ -16,6 +16,16 @@ Give it screenshots you like, or the name of a style. It works out what the app 
 /reskin-full 5 linear          builds 5 versions, in smaller steps
 ```
 
+## Example
+
+A small task app, before and after. Same markup roles, same script, same behaviour: the layout went from one column to a rail and a stage, and the look from default controls to glass.
+
+| Before | After |
+|---|---|
+| ![Before](examples/task-board/before.png) | ![After](examples/task-board/after.png) |
+
+The files are in [`examples/task-board`](examples/task-board), with the [`DESIGN.md`](examples/task-board/DESIGN.md) that describes the result. This is an illustration written for this repository to show the target, not the recorded output of a run.
+
 ## How it works
 
 ```
@@ -36,21 +46,42 @@ style name ──┘                                          ^                 
 
 ## Install
 
-In Claude Code:
+Pick one. The skills do the same either way, only the command names differ.
+
+**As a plugin.** In Claude Code:
 
 ```
 /plugin marketplace add RuBNouS/reskin-skill
 /plugin install reskin@reskin-skill
 ```
 
-Installed as a plugin, the commands are `/reskin:reskin` and so on. To get plain `/reskin`, or for other agents that read skills, copy the three folders in `skills/` into your skills folder, such as `.claude/skills/`. Keep them together, because the other two read `reskin`.
+The commands are then `/reskin:reskin`, `/reskin:reskin-style` and `/reskin:reskin-full`.
 
-You need Node.js to measure colours. Without it, or with an image your system cannot convert, colours are estimated and marked as such.
+**As plain skills, for `/reskin`.** Needs Node.js and a copy of this repository:
+
+```bash
+git clone https://github.com/RuBNouS/reskin-skill
+cd reskin-skill
+node install.mjs --global
+```
+
+`--global` installs for every project. Without it, the skills go into `.claude/skills` of the folder you run it in. `--to <folder>` installs anywhere, which suits other agents that read skills. The three folders must stay together, because the other two read `reskin`; the script copies them together and the skills tell you if one is missing.
+
+## Requirements
+
+- **A git repository with no uncommitted changes** in the files that will change, so the redesign can be undone. If not, the skill stops and tells you to commit or stash first.
+- **A browser the agent can drive.** Without one, the comparison with your reference and the click-through, which is where most of the quality comes from, cannot run, and the skill asks you for captures instead. In Claude Code, enable the Claude in Chrome extension. In the Claude desktop app, its built-in browser works. The skill checks for one at the start and tells you if it is missing.
+- **Node.js**, to measure colours. Without it, or with an image your system cannot convert, colours are estimated and marked as such.
+- **Network access**, only for named styles, which are downloaded when you ask for one. If the download fails, the skill says so and asks for screenshots or a description instead.
+
+`/reskin-full` makes one complete redesign per direction, so 3 directions cost about three times a single `/reskin`. It says so before it starts, and asks first above 4. It also installs the app's dependencies in each worktree so every direction can run.
+
+The skill asks before adding a line about `DESIGN.md` to your `CLAUDE.md` or `AGENTS.md`. It does not edit them on its own.
 
 ## Limits
 
-- It redesigns existing interfaces. To build an app from nothing, other tools fit better.
-- Comparing with the reference needs an agent with a browser. Without one, it asks you for a capture.
+- It redesigns existing web interfaces. Native mobile, desktop toolkits and terminal apps are not supported, and to build an app from nothing other tools fit better.
+- Styling is done the way the project already does it: stylesheets, Tailwind config and classes, or a CSS-in-JS or component library theme. It does not add a styling system.
 - Changing the layout carries more risk than changing colours. Your tests and the click-through catch most of it, and git brings back the rest.
 - Screenshots hold no real values for fonts and sizes, so those are approximations.
 - Most named styles analyse a product's marketing site, not its app, so some rules have to be adapted or dropped.
