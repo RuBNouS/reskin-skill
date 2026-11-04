@@ -7,7 +7,7 @@ disable-model-invocation: true
 
 # Reskin style
 
-Read `../reskin/SKILL.md` and follow it, with these differences. Its `references` and `scripts` folders are the ones to use.
+Read `../reskin/SKILL.md` and follow it, with these differences. Its `references` and `scripts` folders are the ones to use. If that file does not exist, the three skill folders were not installed together: tell the person to install `reskin`, `reskin-style` and `reskin-full` side by side (the README has the install command), and stop.
 
 Apply the reference's whole visual style and leave the layout alone: it should look like the reference, with everything exactly where it was.
 

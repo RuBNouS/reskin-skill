@@ -32,9 +32,21 @@ Read it before deciding anything. You cannot redesign what you have not understo
 - The main flows, written as steps you can click through afterwards.
 - What is drawn by code: canvas, WebGL, charts, game worlds. CSS cannot reach these. If most of the app is like this, say so now.
 - How to run the app and its tests.
-- `git status`: the change has to be reversible. If files you would edit have uncommitted changes, or this is not a git repository, stop and ask.
+- `git status`: the change has to be reversible. If files you would edit have uncommitted changes, or this is not a git repository, stop and say in one line what to do: commit or stash first (or run `git init` and commit), then run the command again. Do not continue until then.
+
+**How the styling is done.** Redesign it in the project's own way, and do not add a styling system it does not use.
+- Plain CSS, SCSS or CSS modules: edit the stylesheets.
+- Tailwind: change the theme in its config and the utility classes in the markup. The config is part of the redesign, not a new dependency.
+- CSS-in-JS and component libraries (styled-components, Emotion, MUI, Chakra and similar): change the theme object first, then the component styles that override it.
+- No web interface (native mobile, desktop toolkits, terminal apps): say that `reskin` redesigns web interfaces, and stop.
+
+**Tools.** Look at what you have before starting, and tell the person once, at the start, anything that is missing:
+- No browser tool: the comparison in section 6 and the click-through in section 7 cannot run, which is where most of the quality comes from. Say so and suggest enabling one: in Claude Code the Claude in Chrome extension, in the Claude desktop app its built-in browser, or any browser skill or connector the agent already has. Offer to continue without it, and if they agree, ask for captures at the end.
+- No Node.js: colours are estimated by eye and marked as estimated.
 
 ## 2. Settle on one DESIGN.md
+
+**Style or task?** The words after the command are a style only if the first word matches a folder in `references/styles.md` (ignoring case and suffixes such as `.app` or `.ai`, so `linear` is `linear.app`). If it is one letter or two away from a folder, such as `lineer`, ask which one was meant. Anything else is a task or a description of a look. Never turn a typo into a task.
 
 | Given | Do |
 |---|---|
@@ -82,6 +94,8 @@ Write the file by following `references/design-md-format.md`. An existing `## Pr
 node scripts/colors.mjs <image> [more images]
 ```
 
+If the capture includes browser chrome or a taskbar, skip it with `--crop=left,top,width,height`, as fractions of the image, for example `--crop=0,0.08,1,0.92`.
+
 `dominant` lists colours by area and `accents` lists the most colourful small areas. Look at the screenshot to decide what each one is: browser chrome, the taskbar, other apps and the fringes around small text get measured too and are not part of the look. Use measured values for flat colours, and as targets to check layered ones against. `converted: true` on a JPEG means colours are approximate. Exit code 2, or no path to the image at all, means reading colours by eye and marking them as estimated.
 
 **Read the rest by looking:** type scale and weights, spacing rhythm, corner radius, depth, density, hierarchy, how much of the screen carries colour, and how the elements are composed. Sizes depend on the capture's scale, so mark them as estimated. You cannot identify a font from pixels.
@@ -96,11 +110,13 @@ If several screenshots disagree, say what you took from each, and ask only if th
 
 ## 4. Make it stick
 
-Conversations do not read `DESIGN.md` by themselves. Add this line to the project's `CLAUDE.md`, or `AGENTS.md` if that is what it uses, unless it is already there. Create `CLAUDE.md` only if neither exists.
+Conversations do not read `DESIGN.md` by themselves, so the project's `CLAUDE.md`, or `AGENTS.md` if that is what it uses, needs this line:
 
 ```
 Before changing the interface, read DESIGN.md and follow it.
 ```
+
+Do not edit those files on your own: they are the person's instructions. If the line is missing, ask in the report (section 8) whether to add it, and add it only after a yes. Create `CLAUDE.md` only if neither file exists and the person agrees.
 
 ## 5. Redesign
 
@@ -158,4 +174,4 @@ Not done until each of these has been run in this session:
 
 ## 8. Report
 
-About five lines: what the look came from, what changed in the layout, what you kept and why, what falls short or could not be checked, and which theme to pick if the first one the person sees is not the one the look came from. Details belong in `DESIGN.md`. Do not commit unless the project's instructions say to.
+About five lines: what the look came from, what changed in the layout, what you kept and why, what falls short or could not be checked, and which theme to pick if the first one the person sees is not the one the look came from. Details belong in `DESIGN.md`. Do not commit unless the project's instructions say to. If section 4's line is missing from the project's instructions, end with one question: add it?

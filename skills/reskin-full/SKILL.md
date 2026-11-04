@@ -7,9 +7,11 @@ disable-model-invocation: true
 
 # Reskin full
 
-Read `../reskin/SKILL.md` first. Its `references` and `scripts` folders are the ones to use. This skill runs its sections 1 to 3 once, explores several directions, and runs the rest only on the one the person picks.
+Read `../reskin/SKILL.md` first. Its `references` and `scripts` folders are the ones to use. If that file does not exist, the three skill folders were not installed together: tell the person to install `reskin`, `reskin-style` and `reskin-full` side by side (the README has the install command), and stop. This skill runs its sections 1 to 3 once, explores several directions, and runs the rest only on the one the person picks.
 
-A number in the arguments is how many directions to make. Without one, make 3. Above 6, say it will take a while and go on. If there is no reference, ask which style to use, as `reskin` does.
+A whole number as the first argument is how many directions to make, and whatever follows is read as `reskin` reads it (style, description or nothing). Without a number, make 3. If there is no reference, ask which style to use, as `reskin` does.
+
+**Say what it costs before building.** Each direction is a full redesign in its own worktree, so the work and the tokens grow with the number. Write one line such as "3 directions: 3 full redesigns, expect this to take a while and use a lot more than `/reskin`." Above 4, ask for a yes before starting. If the person would rather spend little, suggest `/reskin-style`.
 
 ## 1. Plan the directions as a ladder
 
@@ -30,8 +32,9 @@ Write one line per direction, with a short name and what moves in it.
 The project stays as it is. Every direction is complete, so the person can open it and click through it: build every screen, unless the app has many, in which case build the main ones and say which. For each direction:
 
 1. Create a worktree outside the project on its own branch: `git worktree add <temp folder>/<n>-<name> -b reskin/<n>-<name>`.
-2. Write its `DESIGN.md` there and redesign it, following sections 5 and 6 of `reskin`, at this direction's layout level instead of the one section 5 describes. One round of comparison is enough here.
-3. Commit it on its branch and capture every screen.
+2. **Make the worktree runnable.** A worktree only has committed files, so an app with dependencies will not start in it. Look at what the app needs and prepare each worktree: install dependencies with the project's own package manager (or link the main `node_modules`), and copy the files the project ignores but needs to run, such as `.env` or a local database. Copy them, never edit the originals, and never print secret values. Then start it once and check it loads. If it cannot be made to run (a service the project needs, a private registry), say so, build that direction anyway, and give the person the files and captures instead of a running link.
+3. Write its `DESIGN.md` there and redesign it, following sections 5 and 6 of `reskin`, at this direction's layout level instead of the one section 5 describes. One round of comparison is enough here.
+4. Commit it on its branch and capture every screen.
 
 Then look at the captures in order. Each must clearly move further than the one before it, and neighbours must not look alike at a glance. If they do, push the higher one further.
 
