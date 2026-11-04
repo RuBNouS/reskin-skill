@@ -11,9 +11,9 @@ Give it screenshots you like, or the name of a style. It works out what the app 
 /reskin stripe + screenshots   uses Stripe as a base, and the screenshots override it
 /reskin add an export button   does the task under the project's DESIGN.md
 
-/reskin-color + screenshots    changes colours only
-/reskin-full + screenshots     shows 3 directions to choose from
-/reskin-full 5 linear          shows 5 directions
+/reskin-style + screenshots    applies the whole look, without moving anything
+/reskin-full + screenshots     shows 3 directions, from a light layout change to a complete one
+/reskin-full 5 linear          shows 5 directions, in smaller steps
 ```
 
 ## How it works
@@ -30,7 +30,8 @@ style name ──┘                                          ^                 
 - **It works out how things are built.** A screenshot of glass shows glass plus what is behind it. Copying that colour gives a flat panel, so it rebuilds the layers.
 - **Colours are measured.** A small script with no dependencies reads your screenshots' pixels. PNG is read directly. JPEG, WebP and others are converted with what your system already has: Windows Imaging Component, `sips` on macOS, or ImageMagick or ffmpeg on Linux.
 - **It compares and corrects.** It puts the result next to the reference and fixes the largest gap, for up to three rounds.
-- **The app stays itself.** Features, flows, wording and themes stay. So do its name, a font chosen on purpose, and colours that carry meaning.
+- **The app stays itself.** Features, flows, wording and themes stay. So do its name, a font chosen on purpose, and the hue of colours that carry meaning, which still wear the new material.
+- **Nothing is left behind.** It goes through the stylesheet rule by rule and looks at every element, including those your scripts generate.
 - **The look survives.** `DESIGN.md` records all of this, and your own choices carry over each time it is regenerated.
 
 ## Install
