@@ -1,0 +1,8 @@
+{
+  "name": "reskin",
+  "description": "Change how an existing app looks without changing what it does: screenshots or a named style become a DESIGN.md, which is applied to the code and checked.",
+  "version": "0.1.0",
+  "author": { "name": "RuBNouS" },
+  "license": "MIT",
+  "keywords": ["design", "design-md", "restyle", "theme", "screenshot"]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "reskin-skill",
+  "owner": { "name": "RuBNouS" },
+  "plugins": [
+    {
+      "name": "reskin",
+      "source": "./",
+      "description": "Change how an existing app looks without changing what it does."
+    }
+  ]
+}
