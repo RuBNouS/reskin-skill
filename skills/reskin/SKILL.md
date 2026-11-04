@@ -22,7 +22,7 @@ Read it before deciding anything. You cannot redesign what you have not understo
 **The product**
 - What is it for, who uses it, and what mood does it have now?
 - List every screen and state. For each one: what is the one main action, what should the eye land on first, what is secondary?
-- Give every visible element a role: navigation, main action, secondary action, status, data, decoration.
+- Give every visible element a role: navigation, main action, secondary action, status, data, decoration. Include what scripts generate: search them for `innerHTML`, templates and `createElement`, because those parts are the easiest to miss.
 - What is its personality? The name, the logo, a font chosen on purpose, its language and its energy.
 - Which colours carry meaning: win and loss, status, rarity, teams, and anything from the person's data?
 
@@ -67,7 +67,9 @@ node scripts/colors.mjs <image> [more images]
 
 **Map it onto the product.** For each element in the reference, name what plays that role in this app. A segmented control might become the navigation, or a choice between bets. A reference element with no counterpart inspires nothing, and an app element with no counterpart takes its treatment from its closest relative.
 
-**Separate material from personality.** The reference gives the material: light, surfaces, depth, shape, colour. The project keeps its personality: its name and logo, a font chosen on purpose, and colours that carry meaning, which keep their force and are only adjusted for contrast. If the two truly clash, say so in one line and keep going.
+**Separate material from personality.** The reference gives the material: light, surfaces, depth, shape, colour. The project keeps its personality: its name and logo, and a font chosen on purpose. A colour that carries meaning keeps its hue and wears the material: in a glass design a red status is tinted glass, not a solid red block. Nothing is exempt from the material.
+
+Do not judge whether the reference suits the product. The person chose it, so deliver it fully and keep opinions on the fit to yourself unless asked.
 
 If several screenshots disagree, say what you took from each, and ask only if the choice would change the result visibly.
 
@@ -87,7 +89,7 @@ Work from the largest idea to the smallest:
 
 1. **Ambience.** The page's background, light and mood, and the material of each surface. This must already read like the reference before you touch anything else.
 2. **Composition.** Screen by screen, from section 1: make the main thing the focal point, group what belongs together, give it the room the reference gives. You can move, group, nest and resize anything, and add wrappers and decorative elements. No screen should be one small cluster above an empty page.
-3. **Components.** The most used first, using the map from section 3. Copy how the reference's parts are made, not only their colours.
+3. **Components.** The most used first, using the map from section 3, down to the smallest piece, including what scripts generate. Copy how the reference's parts are made, not only their colours.
 4. **States.** Hover, focus, pressed, disabled, empty, loading, win and loss. Add motion if the reference suggests it, and honour `prefers-reduced-motion`. An open `<select>` list ignores normal CSS: use `appearance: base-select` inside `@supports` and style `::picker(select)` and `option`. Set `color-scheme` on each theme.
 5. **Leftovers.** Search for hard-coded colours, radii and shadows, in scripts too.
 
@@ -97,9 +99,11 @@ What must not change:
 - Anything from the walls in section 1. Markup can move as long as those selectors still match and measured elements still measure correctly. Check that code which reads layout, such as positions or widths, still gets the right numbers.
 - Dependencies and frameworks. Fonts load the way the project already loads things, and a local app gets system fonts.
 - Themes. Keep every theme the project ships. If `DESIGN.md` describes one, derive the others from the same token roles and signature. A style's "no light mode" rule does not remove a light theme.
-- Colours from the person's data, which are never replaced.
+- Colours from the person's data, which are never replaced, though they wear the material like any other.
 
 Do not invent content, such as fake numbers, images or features, to fill the layout. Anything drawn by code stays as it is.
+
+A `backdrop-filter` inside another element with `backdrop-filter` blurs nothing useful, because it only sees its parent's contents. Build inner pieces with translucent gradients and highlights instead, and check their translucency is really visible.
 
 ## 6. Compare and correct
 
@@ -111,6 +115,11 @@ This is the step that decides quality, and it comes before any other check. If y
 4. Repeat, up to three rounds. Stop earlier only when every trait is clearly visible on every screen. Report what still falls short.
 
 Without a browser, say that this step could not run and ask the person to send a capture.
+
+Then check that nothing was left behind, because one old piece spoils everything around it:
+
+1. Go through the stylesheet rule by rule. Every rule with a visual property must have changed, or you must be able to say why it did not need to. An untouched rule is a leftover until proven otherwise.
+2. Open every screen and state again, and look at each element from section 1, including generated ones. Does it wear the new material? A flat block inside a glass panel is a failure.
 
 ## 7. Check nothing broke
 

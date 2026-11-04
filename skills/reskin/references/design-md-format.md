@@ -79,7 +79,7 @@ The rules a token cannot express: how each part is made and its states, such as 
 What this app is: its screens, and for each one the main action, the focal point and how it is composed. Then which part of the reference plays which role here.
 
 ## Personality
-What belongs to the project and stays: name, logo, font, colours with meaning, and why.
+What belongs to the project and stays: name, logo, a font chosen on purpose, and the hues of colours with meaning, which still wear the material.
 
 ## Do's and Don'ts
 Concrete rules that keep the look from drifting, including the mistakes that would make it look like a recolour.
