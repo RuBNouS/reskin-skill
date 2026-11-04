@@ -22,11 +22,12 @@ screenshots ─┐
 style name ──┘
 ```
 
-- **Colours are measured.** A small script with no dependencies reads the pixels of PNG screenshots, so you get true hex values and not guesses.
+- **Colours are measured.** A small script with no dependencies reads the pixels of your screenshots, so you get true hex values and not guesses. PNG is read directly. JPEG, WebP and others are converted with what your system already has: Windows Imaging Component, `sips` on macOS, or ImageMagick or ffmpeg on Linux.
 - **The rest is read by eye** and marked as estimated: fonts, sizes, spacing and hierarchy.
 - **The system is taken, not the screen.** Your layout, features and wording stay yours.
 - **Your choices survive.** `DESIGN.md` has a `Project Decisions` section that carries over each time it is regenerated.
 - **Your themes survive.** If a style only describes dark mode, your light theme is derived from it and not deleted.
+- **Colours with meaning survive.** Win and loss, status, rarity and your own data keep their hue.
 
 ## Install
 
@@ -39,13 +40,15 @@ In Claude Code:
 
 Installed as a plugin, the command is `/reskin:reskin`. To get plain `/reskin`, or for other agents that read skills, copy `skills/reskin` into your skills folder, such as `.claude/skills/`.
 
-You need Node.js to measure colours. Without it, or with images that are not PNG, colours are estimated and marked as such.
+You need Node.js to measure colours. Without it, or with an image your system cannot convert, colours are estimated and marked as such.
 
 ## Limits
 
 - It restyles existing interfaces. To build an app from nothing, other tools fit better.
 - Screenshots hold no real values for fonts and sizes, so those are approximations.
 - Most named styles analyse a product's marketing site, not its app, so some rules have to be adapted or dropped.
+- Anything drawn by code, such as canvas, WebGL or a game world, is left alone. In a game, only the menus and overlays change.
+- Styled dropdown lists need a browser with `appearance: base-select`. Others show their default list, which still works.
 - How much of your app it can check depends on your tests and on whether your agent has a browser.
 
 ## Similar projects
