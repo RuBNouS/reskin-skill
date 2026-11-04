@@ -150,13 +150,14 @@ test('contrast matches known WCAG values', () => {
 	assert.strictEqual(contrast('#777777', '#ffffff'), 4.48);
 });
 
-// A 1x1 WebP. Linux and macOS may not have a converter, and then exit code 2 is the correct answer
-test('other formats are converted when the system can', { skip: process.platform !== 'win32' }, () => {
+// A small orange JPEG. Windows can always convert it, while macOS and Linux depend on what is installed
+test('other formats are converted when the system can', () => {
 	const folder = mkdtempSync(join(tmpdir(), 'reskin-'));
 	try {
-		const webp = join(folder, 'pixel.webp');
-		writeFileSync(webp, Buffer.from('UklGRiIAAABXRUJQVlA4IBYAAAAwAQCdASoBAAEADsD+JaQAA3AAAAAA', 'base64'));
-		const run = spawnSync(process.execPath, [SCRIPT, webp], { encoding: 'utf8' });
+		const jpeg = join(folder, 'pixel.jpg');
+		writeFileSync(jpeg, Buffer.from('/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAAIAAgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDyKiiiv6gPxo//2Q==', 'base64'));
+		const run = spawnSync(process.execPath, [SCRIPT, jpeg], { encoding: 'utf8' });
+		if (process.platform !== 'win32' && run.status === 2) return;
 		assert.strictEqual(run.status, 0, run.stdout);
 		const result = JSON.parse(run.stdout);
 		assert.strictEqual(result.converted, true);
