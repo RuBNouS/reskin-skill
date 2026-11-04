@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Focus</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<div class="shell">
+		<aside class="rail">
+			<h1>Focus</h1>
+			<nav class="filters">
+				<button data-filter="all">All</button>
+				<button data-filter="open">Open</button>
+				<button data-filter="done">Done</button>
+			</nav>
+			<p id="count"></p>
+		</aside>
+		<main class="stage">
+			<form id="add">
+				<input id="new" placeholder="What needs your focus?" autocomplete="off">
+				<button>Add</button>
+			</form>
+			<ul id="list"></ul>
+		</main>
+	</div>
+	<script src="app.js"></script>
+</body>
+</html>

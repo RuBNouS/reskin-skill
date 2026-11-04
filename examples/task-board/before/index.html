@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Focus</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<h1>Focus</h1>
+	<form id="add">
+		<input id="new" placeholder="New task" autocomplete="off">
+		<button>Add</button>
+	</form>
+	<div class="filters">
+		<button data-filter="all">All</button>
+		<button data-filter="open">Open</button>
+		<button data-filter="done">Done</button>
+	</div>
+	<ul id="list"></ul>
+	<p id="count"></p>
+	<script src="app.js"></script>
+</body>
+</html>
