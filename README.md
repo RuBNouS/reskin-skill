@@ -38,6 +38,17 @@ Real runs: each command ran in its own fresh session, on a demo copy that starts
 |---|---|
 | ![MyLibrary in the vercel style](examples/vercel/screenshot.png) | ![MyLibrary in the ibm style](examples/ibm/screenshot.png) |
 
+### From a description
+
+No style and no screenshot, only two lines of text. Same kind of real run, from the same starting point:
+
+```
+/reskin an old library card catalogue: warm cream paper, serif headings, one ink-blue accent,
+documents as index cards with a typed label, filters like the tabbed dividers of a card drawer
+```
+
+![MyLibrary as a library card catalogue](examples/paper/screenshot.png)
+
 ## How it works
 
 ```
