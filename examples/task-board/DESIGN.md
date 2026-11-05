@@ -53,7 +53,9 @@ Two columns: 240px rail, flexible stage, 20px gap, 980px maximum width. Below 72
 ## Components
 - Filters live in the rail as a vertical list. The active one gets a lighter fill and an `edge` border.
 - Done marks are a filled gradient circle with a teal glow. Open marks are an empty 1.5px circle.
-- Rows lift 1px on hover.
+- Rows lift 1px on hover. Delete shows on hover.
+- Tags are neutral outlined chips. The app's six tag colours are dropped on purpose: colour is reserved for the accent, and the tag name carries the meaning.
+- The tag select matches the input. "Clear done" is a ghost button under the counter, so it never competes with "Add".
 
 ## Product Map
 - **Single screen, three states** (all, open, done). Main action: add a task. Focal point: the input. Secondary: the list. Status: the "left" counter, which becomes the large gradient number in the rail.
