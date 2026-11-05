@@ -18,13 +18,13 @@ Give it screenshots you like, or the name of a style. It works out what the app 
 
 ## Example
 
-MyLibrary, a real local document manager, redesigned from one screenshot of frosted glass components. The features and behaviour stayed the same. Each category's colour now also tints its card's glow.
+MyLibrary, a real local document manager: its first interface, and its current one, redesigned from one screenshot of frosted glass components. Each category's colour now also tints its card's glow.
 
 | Before | After |
 |---|---|
-| ![MyLibrary before](assets/mylibrary-before.png) | ![MyLibrary after](assets/mylibrary-after.png) |
+| ![MyLibrary before](assets/before.png) | ![MyLibrary after](assets/after.png) |
 
-The documents in these captures are demo data.
+The app gained features between these two versions, such as the type and sort filters, so not every difference comes from the redesign. The documents are demo data, and the app's Portuguese labels were translated for these captures.
 
 ## How it works
 
