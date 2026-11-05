@@ -28,17 +28,15 @@ The before stylesheet was written for this example, in the generic look AI tools
 
 ### Same app, four named styles
 
-The layout changes with the style: a sidebar with cards, a gallery with covers, a dense list, a tile grid.
+Real runs: each command ran in its own fresh session, on a demo copy that starts from the generic look above, with no other instruction. The layout changes with the style, and each folder in [`examples`](examples) holds the `DESIGN.md` that run wrote.
 
 | `/reskin spotify` | `/reskin notion` |
 |---|---|
-| ![MyLibrary in the spotify style](assets/style-spotify.png) | ![MyLibrary in the notion style](assets/style-notion.png) |
+| ![MyLibrary in the spotify style](examples/spotify/screenshot.png) | ![MyLibrary in the notion style](examples/notion/screenshot.png) |
 
 | `/reskin vercel` | `/reskin ibm` |
 |---|---|
-| ![MyLibrary in the vercel style](assets/style-vercel.png) | ![MyLibrary in the ibm style](assets/style-ibm.png) |
-
-An agent wrote one stylesheet per style from that style's file, with the app's code unchanged. These are not recordings of `/reskin` runs.
+| ![MyLibrary in the vercel style](examples/vercel/screenshot.png) | ![MyLibrary in the ibm style](examples/ibm/screenshot.png) |
 
 ## How it works
 
