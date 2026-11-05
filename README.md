@@ -18,13 +18,13 @@ Give it screenshots you like, or the name of a style. It works out what the app 
 
 ## Example
 
-A to-do app with tags, filters and delete, before and after. Same script and behaviour. Before is the default AI look: purple gradient, white card, a rainbow of tags. After is the skill's output: a rail and a stage in glass, with one accent instead of six tag colours.
+A full to-do app (tags, priorities, due dates, filters, search, stats), before and after. Same script and behaviour. Before is what an AI builds by default: purple gradient, white card, gradient tiles, a rainbow of tags. After is the skill's output for "dark glass, translucent panels over soft violet and teal light": a rail and a stage, one accent, tags kept as tinted glass.
 
 | Before (default AI look) | After (`/reskin`) |
 |---|---|
 | ![Before](examples/task-board/before-default.png) | ![After](examples/task-board/after.png) |
 
-Files in [`examples/task-board`](examples/task-board), with the resulting [`DESIGN.md`](examples/task-board/DESIGN.md). Written by hand to show the target, not the recorded output of a run.
+Files in [`examples/task-board`](examples/task-board), with the resulting [`DESIGN.md`](examples/task-board/DESIGN.md). The app was generated first, then the skill's steps were applied to it by an agent. Flows were checked with scripted clicks, not a recorded `/reskin` session.
 
 ## How it works
 
