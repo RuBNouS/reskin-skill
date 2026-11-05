@@ -22,9 +22,9 @@ MyLibrary, a real local document manager, redesigned from one screenshot of fros
 
 | Before | After |
 |---|---|
-| ![MyLibrary before](assets/mylibrary-default.png) | ![MyLibrary after](assets/mylibrary-reskin.png) |
+| ![MyLibrary before](assets/mylibrary-generic.png) | ![MyLibrary after](assets/mylibrary-reskin.png) |
 
-The before stylesheet was exaggerated for this example and is not one the app shipped. The documents are demo data, and the app's Portuguese labels were translated for these captures.
+The before stylesheet was written for this example, in the generic look AI tools tend to produce, and is not one the app shipped. The documents are demo data, and the app's Portuguese labels were translated for these captures.
 
 ## How it works
 
