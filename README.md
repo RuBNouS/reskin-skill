@@ -22,7 +22,7 @@ A small task app, before and after. Same markup roles, same script, same behavio
 
 | Before (default AI look) | After (`/reskin`) |
 |---|---|
-| ![Before](examples/task-board/before.png) | ![After](examples/task-board/after.png) |
+| ![Before](examples/task-board/before-default.png) | ![After](examples/task-board/after.png) |
 
 The files are in [`examples/task-board`](examples/task-board), with the [`DESIGN.md`](examples/task-board/DESIGN.md) that describes the result. This is an illustration written for this repository to show the target, not the recorded output of a run.
 
