@@ -1,26 +1,196 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Focus</title>
-	<link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TaskFlow</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 40px 20px; color: #333; }
+.container { max-width: 760px; margin: 0 auto; background: #fff; border-radius: 20px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); overflow: hidden; }
+.header { background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; padding: 30px; text-align: center; }
+.header h1 { font-size: 2.2rem; margin-bottom: 6px; }
+.header p { opacity: 0.9; }
+.section { padding: 20px 30px; }
+.add-form { display: grid; grid-template-columns: 1fr auto auto auto auto; gap: 10px; }
+input, select { padding: 12px 14px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 14px; font-family: inherit; }
+input:focus, select:focus { outline: none; border-color: #667eea; }
+button { padding: 12px 22px; border: none; border-radius: 10px; background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; font-weight: 600; font-size: 14px; cursor: pointer; transition: transform 0.2s; }
+button:hover { transform: translateY(-2px); }
+.controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; background: #f8f9fa; }
+.controls input { flex: 1; min-width: 160px; }
+.pills { display: flex; gap: 6px; }
+.pill { padding: 8px 16px; border-radius: 20px; background: #e9ecef; color: #555; font-size: 13px; }
+.pill.active { background: #667eea; color: #fff; }
+.tag-filters { display: flex; gap: 8px; flex-wrap: wrap; padding-top: 0; background: #f8f9fa; }
+.tag { padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; color: #fff; text-transform: capitalize; }
+.tag.work { background: #3498db; }
+.tag.personal { background: #2ecc71; }
+.tag.health { background: #e91e63; }
+.tag.study { background: #9b59b6; }
+.tag.ideas { background: #f39c12; }
+.tag.urgent { background: #e74c3c; }
+.tag.all { background: #95a5a6; }
+.tag-filters .tag { cursor: pointer; opacity: 0.55; }
+.tag-filters .tag.active { opacity: 1; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.4); }
+.list { list-style: none; }
+.item { display: flex; align-items: center; gap: 14px; padding: 14px 16px; margin-bottom: 10px; background: #f8f9fa; border-left: 5px solid #ccc; border-radius: 12px; transition: transform 0.2s, box-shadow 0.2s; }
+.item:hover { transform: translateX(4px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
+.item.high { border-left-color: #e74c3c; }
+.item.medium { border-left-color: #f39c12; }
+.item.low { border-left-color: #2ecc71; }
+.item input[type=checkbox] { width: 20px; height: 20px; accent-color: #667eea; }
+.title { flex: 1; font-size: 15px; font-weight: 500; }
+.item.done .title { text-decoration: line-through; color: #aaa; }
+.due { font-size: 12px; color: #777; }
+.due.overdue { color: #e74c3c; font-weight: 700; }
+.badge { padding: 3px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+.badge.high { background: #fdecea; color: #e74c3c; }
+.badge.medium { background: #fef5e7; color: #f39c12; }
+.badge.low { background: #eafaf1; color: #2ecc71; }
+.del { padding: 6px 10px; background: #fdecea; color: #e74c3c; }
+.empty { text-align: center; padding: 40px; color: #999; }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; text-align: center; }
+.stat { padding: 14px; border-radius: 12px; background: linear-gradient(135deg, #f093fb, #f5576c); color: #fff; }
+.stat:nth-child(2) { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+.stat:nth-child(3) { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+.stat:nth-child(4) { background: linear-gradient(135deg, #fa709a, #fee140); }
+.stat b { display: block; font-size: 1.6rem; }
+.stat span { font-size: 12px; opacity: 0.9; }
+.progress { height: 10px; border-radius: 5px; background: #e9ecef; margin: 16px 0 12px; overflow: hidden; }
+.progress div { height: 100%; width: 0; background: linear-gradient(90deg, #667eea, #764ba2); transition: width 0.4s; }
+.footer { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: #777; }
+.clear { background: #fdecea; color: #e74c3c; padding: 8px 16px; }
+@media (max-width: 640px) { .add-form { grid-template-columns: 1fr 1fr; } .add-form input:first-child { grid-column: 1 / -1; } .stats { grid-template-columns: 1fr 1fr; } }
+</style>
 </head>
 <body>
-	<h1>Focus</h1>
-	<form id="add">
-		<input id="new" placeholder="New task" autocomplete="off">
-		<select id="tag" aria-label="Tag"></select>
-		<button>Add</button>
-	</form>
-	<div class="filters">
-		<button data-filter="all">All</button>
-		<button data-filter="open">Open</button>
-		<button data-filter="done">Done</button>
-	</div>
-	<ul id="list"></ul>
-	<p id="count"></p>
-	<button id="clear" type="button">Clear done</button>
-	<script src="app.js"></script>
+<div class="container">
+  <div class="header">
+    <h1>TaskFlow</h1>
+    <p>Organize your work, achieve your goals</p>
+  </div>
+
+  <form class="section add-form" id="addForm">
+    <input id="title" placeholder="What needs to be done?" autocomplete="off" required>
+    <select id="priority"><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option></select>
+    <select id="tag"></select>
+    <input id="due" type="date">
+    <button>Add Task</button>
+  </form>
+
+  <div class="section controls">
+    <input id="search" placeholder="Search tasks...">
+    <div class="pills" id="statusFilters">
+      <button type="button" class="pill active" data-status="all">All</button>
+      <button type="button" class="pill" data-status="active">Active</button>
+      <button type="button" class="pill" data-status="done">Completed</button>
+    </div>
+    <select id="sort"><option value="created">Newest</option><option value="due">Due date</option><option value="priority">Priority</option></select>
+  </div>
+  <div class="section tag-filters" id="tagFilters"></div>
+
+  <div class="section"><ul class="list" id="list"></ul></div>
+
+  <div class="section">
+    <div class="stats">
+      <div class="stat"><b id="sTotal">0</b><span>Total</span></div>
+      <div class="stat"><b id="sActive">0</b><span>Active</span></div>
+      <div class="stat"><b id="sDone">0</b><span>Completed</span></div>
+      <div class="stat"><b id="sLate">0</b><span>Overdue</span></div>
+    </div>
+    <div class="progress"><div id="bar"></div></div>
+    <div class="footer"><span id="summary"></span><button class="clear" id="clear">Clear completed</button></div>
+  </div>
+</div>
+
+<script>
+const TAGS = ['work', 'personal', 'health', 'study', 'ideas', 'urgent'];
+const RANK = { high: 0, medium: 1, low: 2 };
+const KEY = 'taskflow.v1';
+const $ = (s) => document.querySelector(s);
+const esc = (t) => t.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+const day = (n) => new Date(Date.now() + n * 864e5).toISOString().slice(0, 10);
+
+let tasks = JSON.parse(localStorage.getItem(KEY) || 'null') || [
+  { id: 1, title: 'Finish the quarterly report', priority: 'high', tag: 'work', due: day(-1), done: false, createdAt: 6 },
+  { id: 2, title: 'Book a dentist appointment', priority: 'medium', tag: 'health', due: day(3), done: false, createdAt: 5 },
+  { id: 3, title: 'Read chapter 4 of Operating Systems', priority: 'medium', tag: 'study', due: day(5), done: false, createdAt: 4 },
+  { id: 4, title: 'Sketch the new landing page', priority: 'low', tag: 'ideas', due: '', done: true, createdAt: 3 },
+  { id: 5, title: 'Pay the electricity bill', priority: 'high', tag: 'urgent', due: day(1), done: false, createdAt: 2 },
+  { id: 6, title: 'Call mum on Sunday', priority: 'low', tag: 'personal', due: day(6), done: true, createdAt: 1 }
+];
+let status = 'all', tagFilter = 'all';
+
+const save = () => localStorage.setItem(KEY, JSON.stringify(tasks));
+const overdue = (t) => !t.done && t.due && t.due < day(0);
+
+$('#tag').innerHTML = TAGS.map((t) => `<option value="${t}">${t[0].toUpperCase() + t.slice(1)}</option>`).join('');
+$('#tagFilters').innerHTML = ['all', ...TAGS].map((t) => `<span class="tag ${t}" data-tag="${t}">${t}</span>`).join('');
+
+function render() {
+  const q = $('#search').value.trim().toLowerCase();
+  const sort = $('#sort').value;
+  const shown = tasks
+    .filter((t) => status === 'all' || (status === 'done') === t.done)
+    .filter((t) => tagFilter === 'all' || t.tag === tagFilter)
+    .filter((t) => t.title.toLowerCase().includes(q))
+    .sort((a, b) => sort === 'priority' ? RANK[a.priority] - RANK[b.priority]
+      : sort === 'due' ? (a.due || '9').localeCompare(b.due || '9')
+      : b.createdAt - a.createdAt);
+
+  $('#list').innerHTML = shown.length ? shown.map((t) => `
+    <li class="item ${t.priority}${t.done ? ' done' : ''}" data-id="${t.id}">
+      <input type="checkbox" ${t.done ? 'checked' : ''} aria-label="Toggle">
+      <span class="title">${esc(t.title)}</span>
+      <span class="tag ${t.tag}">${t.tag}</span>
+      <span class="badge ${t.priority}">${t.priority}</span>
+      ${t.due ? `<span class="due${overdue(t) ? ' overdue' : ''}">${overdue(t) ? 'Overdue ' : ''}${t.due.slice(5)}</span>` : ''}
+      <button class="del" aria-label="Delete">&times;</button>
+    </li>`).join('') : '<li class="empty">No tasks match. Nice and clear!</li>';
+
+  document.querySelectorAll('#statusFilters .pill').forEach((b) => b.classList.toggle('active', b.dataset.status === status));
+  document.querySelectorAll('#tagFilters .tag').forEach((b) => b.classList.toggle('active', b.dataset.tag === tagFilter));
+
+  const done = tasks.filter((t) => t.done).length;
+  $('#sTotal').textContent = tasks.length;
+  $('#sActive').textContent = tasks.length - done;
+  $('#sDone').textContent = done;
+  $('#sLate').textContent = tasks.filter(overdue).length;
+  $('#bar').style.width = (tasks.length ? Math.round((done / tasks.length) * 100) : 0) + '%';
+  $('#summary').textContent = `${done} of ${tasks.length} tasks completed`;
+}
+
+$('#addForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const title = $('#title').value.trim();
+  if (!title) return;
+  tasks.push({ id: Date.now(), title, priority: $('#priority').value, tag: $('#tag').value, due: $('#due').value, done: false, createdAt: Date.now() });
+  e.target.reset();
+  save(); render();
+});
+$('#list').addEventListener('click', (e) => {
+  const li = e.target.closest('.item');
+  if (!li) return;
+  const t = tasks.find((x) => x.id == li.dataset.id);
+  if (e.target.closest('.del')) tasks = tasks.filter((x) => x !== t);
+  else if (e.target.type === 'checkbox') t.done = !t.done;
+  else return;
+  save(); render();
+});
+$('#list').addEventListener('dblclick', (e) => {
+  const title = e.target.closest('.title');
+  if (!title) return;
+  const t = tasks.find((x) => x.id == title.parentElement.dataset.id);
+  const next = prompt('Edit task', t.title);
+  if (next && next.trim()) { t.title = next.trim(); save(); render(); }
+});
+$('#statusFilters').addEventListener('click', (e) => { if (e.target.dataset.status) { status = e.target.dataset.status; render(); } });
+$('#tagFilters').addEventListener('click', (e) => { if (e.target.dataset.tag) { tagFilter = e.target.dataset.tag; render(); } });
+$('#search').addEventListener('input', render);
+$('#sort').addEventListener('change', render);
+$('#clear').addEventListener('click', () => { tasks = tasks.filter((t) => !t.done); save(); render(); });
+render();
+</script>
 </body>
 </html>
