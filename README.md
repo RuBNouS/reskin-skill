@@ -26,6 +26,20 @@ MyLibrary, a real local document manager, redesigned from one screenshot of fros
 
 The before stylesheet was written for this example, in the generic look AI tools tend to produce, and is not one the app shipped. The documents are demo data, and the app's Portuguese labels were translated for these captures.
 
+### Same app, four named styles
+
+The layout changes with the style: a sidebar with cards, a gallery with covers, a dense list, a tile grid.
+
+| `/reskin spotify` | `/reskin notion` |
+|---|---|
+| ![MyLibrary in the spotify style](assets/style-spotify.png) | ![MyLibrary in the notion style](assets/style-notion.png) |
+
+| `/reskin vercel` | `/reskin ibm` |
+|---|---|
+| ![MyLibrary in the vercel style](assets/style-vercel.png) | ![MyLibrary in the ibm style](assets/style-ibm.png) |
+
+An agent wrote one stylesheet per style from that style's file, with the app's code unchanged. These are not recordings of `/reskin` runs.
+
 ## How it works
 
 ```
