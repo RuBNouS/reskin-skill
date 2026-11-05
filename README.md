@@ -18,9 +18,9 @@ Give it screenshots you like, or the name of a style. It works out what the app 
 
 ## Example
 
-A small task app, before and after. Same markup roles, same script, same behaviour: the layout went from one column to a rail and a stage, and the look from default controls to glass.
+A small task app, before and after. Same markup roles, same script, same behaviour. Before is the generic look an AI produces by default: purple gradient, white card, rounded everything. After is what the skill makes: the layout goes from one centred column to a rail and a stage, and the look to glass.
 
-| Before | After |
+| Before (default AI look) | After (`/reskin`) |
 |---|---|
 | ![Before](examples/task-board/before.png) | ![After](examples/task-board/after.png) |
 
