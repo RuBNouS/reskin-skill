@@ -32,9 +32,9 @@ Write one line per direction, with a short name and what moves in it.
 The project stays as it is. Every direction is complete, so the person can open it and click through it: build every screen, unless the app has many, in which case build the main ones and say which. For each direction:
 
 1. Create a worktree outside the project on its own branch: `git worktree add <temp folder>/<n>-<name> -b reskin/<n>-<name>`.
-2. **Make the worktree runnable.** A worktree only has committed files, so an app with dependencies will not start in it. Look at what the app needs and prepare each worktree: install dependencies with the project's own package manager (or link the main `node_modules`), and copy the files the project ignores but needs to run, such as `.env` or a local database. Copy them, never edit the originals, and never print secret values. Then start it once and check it loads. If it cannot be made to run (a service the project needs, a private registry), say so, build that direction anyway, and give the person the files and captures instead of a running link.
+2. **Make the worktree runnable.** A worktree only has committed files, so an app with dependencies will not start in it. Look at what the app needs and prepare each worktree: install dependencies with the project's own package manager, from the lockfile without changing it (for example `npm ci`; or link the main `node_modules`), and copy the files the project ignores but needs to run, such as `.env` or a local database. Copy them, never edit the originals, and never print secret values. Then start it once and check it loads. If it cannot be made to run (a service the project needs, a private registry), say so, build that direction anyway, and give the person the files and captures instead of a running link.
 3. Write its `DESIGN.md` there and redesign it, following sections 5 and 6 of `reskin`, at this direction's layout level instead of the one section 5 describes. One round of comparison is enough here.
-4. Commit it on its branch and capture every screen.
+4. Commit it on its branch, staging only the files the redesign changed (never the lockfile, logs or copied files), and capture every screen.
 
 Then look at the captures in order. Each must clearly move further than the one before it, and neighbours must not look alike at a glance. If they do, push the higher one further.
 
@@ -58,4 +58,4 @@ Stop until the person picks. They may also ask to combine directions or to try m
 
 1. Bring the chosen direction into the project without its commit: `git merge --squash reskin/<n>-<name>`. If the app has screens the direction did not build, finish them at the same layout level.
 2. Run sections 4, 6 and 7 of `reskin`.
-3. Stop any servers, and remove the worktrees and branches with `git worktree remove` and `git branch -D`, including the chosen one, whose result now lives in the project.
+3. Stop any servers and check that their processes have really exited: a running server locks its worktree folder on Windows, and `git worktree remove` then fails or leaves the folder behind. Then remove the worktrees and branches with `git worktree remove` and `git branch -D`, including the chosen one, whose result now lives in the project.
