@@ -137,11 +137,15 @@ What must not change:
 
 - What the app does: features, flows, routes, data, rules, and all wording.
 - Anything from the walls in section 1. Markup can move as long as those selectors still match and measured elements still measure correctly. Check that code which reads layout, such as positions or widths, still gets the right numbers.
-- Dependencies and frameworks. Fonts load the way the project already loads things, and a local app gets system fonts.
+- Dependencies and frameworks. Fonts load the way the project already loads things, and a local app gets system fonts. This includes Tailwind plugins and any other new package: use what is already installed, and if something would really need a new one, say so in the report instead of adding it.
 - Themes. Keep every theme the project ships. If `DESIGN.md` describes one, derive the others from the same token roles and signature. A style's "no light mode" rule does not remove a light theme.
 - Colours from the person's data, which are never replaced, though they wear the material like any other.
 
-Do not invent content, such as fake numbers, images or features, to fill the layout. Anything drawn by code stays as it is.
+**The brand mark stays.** The logo, favicon and app icon keep their shape, glyph and wording. They may be recoloured to the palette when the old colours clash, but never replaced, redrawn, or put inside a new container (a coloured circle, a badge). Do not touch the favicon file unless recolouring it.
+
+**No invented content.** Do not add text, numbers, images, icons, controls or sections that the app did not have, to fill the layout: no footer, tagline, repeated app name, placeholder data or illustration. Decoration is allowed only when it carries no meaning and comes from the reference's material: backgrounds, gradients, glows, borders, shadows, pseudo-elements, or an empty `aria-hidden` element that exists only to paint one of those. Wrappers needed for the layout are fine. If the reference has a shape or an element the app has no counterpart for (section 3), leave it out.
+
+Anything drawn by code stays as it is.
 
 A `backdrop-filter` inside another element with `backdrop-filter` blurs nothing useful, because it only sees its parent's contents. Build inner pieces with translucent gradients and highlights instead, and check their translucency is really visible.
 
@@ -177,4 +181,4 @@ Not done until each of these has been run in this session:
 
 ## 8. Report
 
-About five lines: what the look came from, what changed in the layout, what you kept and why, what falls short or could not be checked, and which theme to pick if the first one the person sees is not the one the look came from. Details belong in `DESIGN.md`. Do not commit unless the project's instructions say to. If section 4's line is missing from the project's instructions, end with one question: add it?
+About five lines: what the look came from, what changed in the layout, what you kept and why, what falls short or could not be checked, and which theme to pick if the first one the person sees is not the one the look came from. Details belong in `DESIGN.md`. Do not commit unless the person's instructions say to, whether in the project's `CLAUDE.md` or `AGENTS.md` or in their own personal or global ones. If those say to commit, follow them. If section 4's line is missing from the project's instructions, end with one question: add it?
