@@ -2,3 +2,9 @@ node_modules/
 .DS_Store
 Thumbs.db
 CLAUDE.md
+
+# Instruções para IA, planos e notas (só locais)
+AGENTS.md
+GEMINI.md
+PLANO.md
+NOTAS.md
