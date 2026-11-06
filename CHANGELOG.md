@@ -3,6 +3,7 @@
 ## Unreleased
 
 - `reskin`: the brand mark (logo, favicon, app icon) is never replaced or put in a new container. Added a clear line between allowed decoration and invented content. New packages, including Tailwind plugins, are reported instead of added. Commits follow the person's own instructions, project or personal.
+- `reskin-full`: installs from the lockfile without changing it, stages only the files the redesign changed, and checks that servers have really exited before removing worktrees (a running server locks the folder on Windows).
 - README examples are real runs on a copy of MyLibrary (`examples/`), not a bundled sample app.
 
 ## 0.3.0
